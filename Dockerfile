@@ -9,7 +9,6 @@ RUN apt-get -y install nodejs
 ADD package.json /work/
 RUN cd work && npm install
 ADD . /work
-RUN cd work && make
 ENV NODE_ENV production
 ENTRYPOINT ["/usr/bin/node", "/work/index.js"]
 EXPOSE 8080
