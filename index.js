@@ -38,13 +38,13 @@ var server = http.createServer(function (req, res) {
   var channelToken = req.headers['x-goog-channel-token'];
 
   // emit the request
-  console.log('channel_id: ' + channelId);
-  conosle.log('channel_expires: ' + channelExpires);
-  console.log('resoruce_state: ' + resourceState);
   console.log('message_number: ' + messageNumber);
+  console.log('channel_id: ' + channelId);
+  console.log('channel_expires: ' + channelExpires);
+  console.log('channel_token: ' + channelToken);
+  console.log('resoruce_state: ' + resourceState);
   console.log('resource_id: ' + resourceId);
   console.log('resource_uri: ' + resourceURI);
-  console.log('channel_token: ' + channelToken);
 
   // write successful response
   res.writeHead(200);
