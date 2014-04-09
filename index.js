@@ -3,14 +3,6 @@ var http = require('http');
 // listen for requests from google google calendar
 var server = http.createServer(function (req, res) {
 
-  // verify this is actually google by testing the token
-  // if this is a modification or deletion of an existing event, check if we know about it
-  // (query database for the eventid)
-  // if it hits our database, then update our information
-  // otherwise, assume this is for an event we dont care about anymore
-
-  // filter balanced hooks here as well
-
   /* SAMPLE POST REQUEST
 
      'x-goog-channel-id': '0d8d1a8e-720d-4a20-959b-dcd4e8a06cd9',
@@ -24,33 +16,57 @@ var server = http.createServer(function (req, res) {
   */
 
   // filter out requests that dont come from google
-  if (req.headers['user-agent'] !== 'APIs-Google; (+https://developers.google.com/APIs-Google.html)') {
-    res.writeHead(404);
+  if (req.headers['user-agent'] === 'APIs-Google; (+https://developers.google.com/APIs-Google.html)') {
+
+    var channelId = req.headers['x-goog-channel-id'];
+    var channelExpires = new Date(req.headers['x-goog-channel-expiration']);
+    var resourceState = req.headers['x-goog-resource-state'];
+    var messageNumber = req.headers['x-goog-message-number'];
+    var resourceId = req.headers['x-goog-resource-id'];
+    var resourceURI = req.headers['x-goog-resource-uri'];
+    var channelToken = req.headers['x-goog-channel-token'];
+
+    // emit the request
+    console.log('channel_id: ' + channelId);
+    conosle.log('channel_expires: ' + channelExpires);
+    console.log('resource_state: ' + resourceState);
+    console.log('message_number: ' + messageNumber);
+    console.log('resource_id: ' + resourceId);
+    console.log('resource_uri: ' + resourceURI);
+    console.log('channel_token: ' + channelToken);
+
+    // write successful response
+    res.writeHead(200);
+
+    // complete the response
     res.end();
+
+    // lookup the user associated with this watch
+    // perform a calendar sync from last known timestamp
+    // apply updates with test for old timestamp
+    // apply reach API business logic
+    // if user-facing state changed, publish notification on redis channel
+    // if socket-based user session is active, emit event on the socket
+    // otherwise, sent a push notification to wake up app and figure out what to do
+
+  } else {
+
+
+    console.log(req);
+
+    /*
+    if (balanced) {
+
+
+
+    } else {
+
+      res.writeHead(404);
+      res.end();
+
+    }*/
+
   }
-
-  var channelId = req.headers['x-goog-channel-id'];
-  var channelExpires = new Date(req.headers['x-goog-channel-expiration']);
-  var resourceState = req.headers['x-goog-resource-state'];
-  var messageNumber = req.headers['x-goog-message-number'];
-  var resourceId = req.headers['x-goog-resource-id'];
-  var resourceURI = req.headers['x-goog-resource-uri'];
-  var channelToken = req.headers['x-goog-channel-token'];
-
-  // emit the request
-  console.log('channel_id: ' + channelId);
-  conosle.log('channel_expires: ' + channelExpires);
-  console.log('resoruce_state: ' + resourceState);
-  console.log('message_number: ' + messageNumber);
-  console.log('resource_id: ' + resourceId);
-  console.log('resource_uri: ' + resourceURI);
-  console.log('channel_token: ' + channelToken);
-
-  // write successful response
-  res.writeHead(200);
-
-  // complete the response
-  res.end();
 
 });
 
