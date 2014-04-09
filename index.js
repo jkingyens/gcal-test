@@ -1,4 +1,5 @@
 var http = require('http');
+var concat = require('concat-stream');
 
 // listen for requests from google google calendar
 var server = http.createServer(function (req, res) {
@@ -59,12 +60,19 @@ var server = http.createServer(function (req, res) {
        connection: 'close' },
       */
 
-      req.on('data', function (data) {
-        console.log(data.toString());
+      var data_stream = concat(function (data) {
+        try {
+          var parsed_data = JSON.parse(data);
+          console.log(parsed_data);
+        } catch (err) {
+          res.writeHead(500);
+          res.end();
+        }
+        res.writeHead(200);
+        res.end();
       });
 
-      res.writeHead(200);
-      res.end();
+      req.pipe(data_stream);
 
     } else {
 
