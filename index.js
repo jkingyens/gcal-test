@@ -3,20 +3,20 @@ var http = require('http');
 // listen for requests from google google calendar
 var server = http.createServer(function (req, res) {
 
-  /* SAMPLE POST REQUEST
-
-     'x-goog-channel-id': '0d8d1a8e-720d-4a20-959b-dcd4e8a06cd9',
-     'x-goog-channel-expiration': 'Tue, 15 Apr 2014 21:09:25 GMT',
-     'x-goog-resource-state': 'exists',
-     'x-goog-message-number': '157060',
-     'x-goog-resource-id': 'sT0YtVEKk7n6S_SM-fFmClbsgcQ',
-     'x-goog-resource-uri': 'https://www.googleapis.com/calendar/v3/calendars/jeff.kingyens@gmail.com/events?alt=json',
-     'x-goog-channel-token': '6cba8ad1-e4ac-4f01-9c27-647659f168e2',
-
-  */
-
   // filter out requests that dont come from google
   if (req.headers['user-agent'] === 'APIs-Google; (+https://developers.google.com/APIs-Google.html)') {
+
+    /* SAMPLE POST REQUEST
+
+       'x-goog-channel-id': '0d8d1a8e-720d-4a20-959b-dcd4e8a06cd9',
+       'x-goog-channel-expiration': 'Tue, 15 Apr 2014 21:09:25 GMT',
+       'x-goog-resource-state': 'exists',
+       'x-goog-message-number': '157060',
+       'x-goog-resource-id': 'sT0YtVEKk7n6S_SM-fFmClbsgcQ',
+       'x-goog-resource-uri': 'https://www.googleapis.com/calendar/v3/calendars/jeff.kingyens@gmail.com/events?alt=json',
+       'x-goog-channel-token': '6cba8ad1-e4ac-4f01-9c27-647659f168e2',
+
+    */
 
     var channelId = req.headers['x-goog-channel-id'];
     var channelExpires = new Date(req.headers['x-goog-channel-expiration']);
@@ -35,12 +35,6 @@ var server = http.createServer(function (req, res) {
     console.log('resource_id: ' + resourceId);
     console.log('resource_uri: ' + resourceURI);
 
-    // write successful response
-    res.writeHead(200);
-
-    // complete the response
-    res.end();
-
     // lookup the user associated with this watch
     // perform a calendar sync from last known timestamp
     // apply updates with test for old timestamp
@@ -51,37 +45,33 @@ var server = http.createServer(function (req, res) {
 
   } else {
 
+    if (req.headers['user-agent'] === 'balanced/hooker/1.0') {
 
-    console.log(req);
-    res.writeHead(200);
-    res.end();
+      /*
+       'user-agent': 'balanced/hooker/1.0',
+       'x-newrelic-id': 'Vg8CVVdWGwIJUFVXAwI=',
+       'x-newrelic-transaction': 'PxRSBwdaC1YCBgABVAJTVFYJFB9CAAIOQwdl',
+       'x-forwarded-for': '::ffff:50.18.199.26',
+       'x-real-ip': '::ffff:50.18.199.26',
+       'x-forwarded-protocol': 'http',
+       'x-forwarded-proto': 'http',
+       'x-forwarded-port': '80',
+       connection: 'close' },
+      */
 
+      req.on('data', function (data) {
+        console.log(data.toString());
+      });
 
-    /* 
-
-     'user-agent': 'balanced/hooker/1.0',
-     'x-newrelic-id': 'Vg8CVVdWGwIJUFVXAwI=',
-     'x-newrelic-transaction': 'PxRSBwdaC1YCBgABVAJTVFYJFB9CAAIOQwdl',
-     'x-forwarded-for': '::ffff:50.18.199.26',
-     'x-real-ip': '::ffff:50.18.199.26',
-     'x-forwarded-protocol': 'http',
-     'x-forwarded-proto': 'http',
-     'x-forwarded-port': '80',
-     connection: 'close' },
-
-    */
-
-    /*
-    if (balanced) {
-
-
+      res.writeHead(200);
+      res.end();
 
     } else {
 
       res.writeHead(404);
       res.end();
 
-    }*/
+    }
 
   }
 
