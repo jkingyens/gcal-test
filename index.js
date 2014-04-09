@@ -53,6 +53,23 @@ var server = http.createServer(function (req, res) {
 
 
     console.log(req);
+    res.writeHead(200);
+    res.end();
+
+
+    /* 
+
+     'user-agent': 'balanced/hooker/1.0',
+     'x-newrelic-id': 'Vg8CVVdWGwIJUFVXAwI=',
+     'x-newrelic-transaction': 'PxRSBwdaC1YCBgABVAJTVFYJFB9CAAIOQwdl',
+     'x-forwarded-for': '::ffff:50.18.199.26',
+     'x-real-ip': '::ffff:50.18.199.26',
+     'x-forwarded-protocol': 'http',
+     'x-forwarded-proto': 'http',
+     'x-forwarded-port': '80',
+     connection: 'close' },
+
+    */
 
     /*
     if (balanced) {
