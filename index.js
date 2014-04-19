@@ -4,6 +4,8 @@ var concat = require('concat-stream');
 // listen for requests from google google calendar
 var server = http.createServer(function (req, res) {
 
+  console.log(req.headers['user-agent']);
+
   // filter out requests that dont come from google
   if (req.headers['user-agent'] === 'APIs-Google; (+https://developers.google.com/APIs-Google.html)') {
 
