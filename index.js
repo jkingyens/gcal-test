@@ -4,10 +4,9 @@ var concat = require('concat-stream');
 // listen for requests from google google calendar
 var server = http.createServer(function (req, res) {
 
-  console.log(req.headers['user-agent']);
-
   // filter out requests that dont come from google
-  if (req.headers['user-agent'] === 'APIs-Google; (+https://developers.google.com/APIs-Google.html)') {
+  // APIs-Google; (+https://developers.google.com/webmasters/APIs-Google.html)
+  if (req.headers['user-agent'] === 'APIs-Google; (+https://developers.google.com/webmasters/APIs-Google.html)') {
 
     /* SAMPLE POST REQUEST
 
@@ -78,8 +77,7 @@ var server = http.createServer(function (req, res) {
 
     } else {
 
-      console.log('UNKNOWN');
-      console.log(res);
+      console.log('UNKNOWN AGENT: ' + req.headers['user-agent']);
       res.writeHead(404);
       res.end();
 
