@@ -76,6 +76,8 @@ var server = http.createServer(function (req, res) {
 
     } else {
 
+      console.log('UNKNOWN');
+      console.log(res);
       res.writeHead(404);
       res.end();
 
